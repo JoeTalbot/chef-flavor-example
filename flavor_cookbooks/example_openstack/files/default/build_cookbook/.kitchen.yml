@@ -1,0 +1,29 @@
+---
+driver:
+  name: openstack
+  openstack_username: <%= ENV['OS_USERNAME'] %>
+  openstack_api_key: <%= ENV['OS_PASSWORD'] %>
+  openstack_auth_url: <%= ENV['OS_AUTH_URL'] %>/tokens
+  openstack_tenant: <%= ENV['OS_TENANT_NAME'] %>
+  floating_ip_pool: <%= ENV['FLOATING_IP_POOL'] || 'your floating ip pool attached to your network' %>
+  network_ref: <%= ENV['NETWORK_REF'] || '/your network name/' %>
+  private_key_path: <%= ENV['OS_PRIVATE_KEY'] || '$HOME/.ssh/id_rsa' %>
+  public_key_path: <%= ENV['OS_PUBLIC_KEY'] || '$HOME/.ssh/id_rsa.pub' %>
+
+provisioner:
+  name: chef_zero
+  encrypted_data_bag_secret_key_path: 'secrets/fakey-mcfakerton'
+  data_bags_path: './data_bags'
+
+platforms:
+  - name: target-centos-7-latest
+  transport:
+    username: cloud-user
+    ssh_key: <%= ENV['SSH_KEY_FILE'] %>
+
+suites:
+  - name: default
+    run_list:
+      - recipe[delivery_build::default]
+      - recipe[test]
+    attributes:

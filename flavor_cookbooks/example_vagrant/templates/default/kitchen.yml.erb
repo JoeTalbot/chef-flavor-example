@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  chef_omnibus_url: http://www.chef.io/chef/install.sh
+  require_chef_omnibus: 12.7.2
+  transport:
+    user: vagrant
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: CentOS_7
+    driver_config:
+      box: CentOS_7
+      box_url: http://some_url/current/centos7_daily.box
+
+suites:
+  - name: default
+    run_list:
+      - recipe[<%= cookbook_name %>::default]
+    attributes:

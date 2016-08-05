@@ -1,0 +1,31 @@
+---
+driver:
+  name: openstack
+  openstack_username: <%%= ENV['OS_USERNAME'] %>
+  openstack_api_key: <%%= ENV['OS_PASSWORD'] %>
+  openstack_auth_url: <%%= ENV['OS_AUTH_URL'] %>/tokens
+  openstack_tenant: <%%= ENV['OS_TENANT_NAME'] %>
+  floating_ip_pool: <%%= ENV['FLOATING_IP_POOL'] || 'your floating ip pool attached to your network' %>
+  network_ref: <%%= ENV['NETWORK_REF'] || '/your network name/' %>
+  private_key_path: <%%= ENV['OS_PRIVATE_KEY'] || '$HOME/.ssh/id_rsa' %>
+  public_key_path: <%%= ENV['OS_PUBLIC_KEY'] || '$HOME/.ssh/id_rsa.pub' %>
+
+provisioner:
+ name: chef_zero
+ chef_omnibus_url: http://www.chef.io/chef/install.sh
+ require_chef_omnibus: 12.7.2
+
+verifier:
+  name: inspec
+
+platforms:
+- name: centos-7-latest
+  transport:
+    username: some_user_name
+    ssh_key: <%%= ENV['SSH_KEY_FILE'] %>
+
+suites:
+  - name: default
+    run_list:
+      - recipe[<%= cookbook_name %>::default]
+    attributes:

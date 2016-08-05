@@ -1,0 +1,8 @@
+build:
+  image: ruby
+  commands:
+
+    # Run Tests
+    - gem install rubocop
+    - rubocop
+    # - rake test
